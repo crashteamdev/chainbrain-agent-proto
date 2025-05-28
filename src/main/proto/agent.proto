@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package dev.crashteam.cbagent;
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "dev.crashteam.cbagent.proto";
+option java_outer_classname = "AgentServiceProto";
+
+// Message processing request
+message ProcessMessageRequest {
+  string user_id = 1;
+  string conversation_id = 2;
+  string message = 3;
+  MessageContext context = 4;
+  AgentOptions options = 5;
+}
+
+// Message processing response
+message ProcessMessageResponse {
+  string response = 1;
+  ModelInfo model_used = 2;
+  repeated ToolExecution tool_executions = 3;
+  TokenUsage token_usage = 4;
+  ResponseMetadata metadata = 5;
+}
+
+// Streaming message chunk
+message MessageChunk {
+  ChunkType type = 1;
+  string content = 2;
+  ModelInfo model_info = 3;
+  ToolExecution tool_execution = 4;
+
+  enum ChunkType {
+    TEXT = 0;
+    TOOL_CALL = 1;
+    TOOL_RESULT = 2;
+    MODEL_SWITCH = 3;
+    COMPLETE = 4;
+  }
+}
+
+// Message context
+message MessageContext {
+  MessageType message_type = 1;
+  repeated string attachments = 2;
+  map<string, string> metadata = 3;
+
+  enum MessageType {
+    TEXT = 0;
+    IMAGE = 1;
+    DOCUMENT = 2;
+    CODE = 3;
+  }
+}
+
+// Agent options
+message AgentOptions {
+  bool auto_model_selection = 1;
+  string preferred_provider = 2;
+  string preferred_model = 3;
+  double temperature = 4;
+  int32 max_tokens = 5;
+  bool enable_tools = 6;
+  repeated string allowed_tools = 7;
+}
+
+// Model information
+message ModelInfo {
+  string provider = 1;
+  string model_name = 2;
+  ModelCapabilities capabilities = 3;
+  double cost_estimate = 4;
+}
+
+// Model capabilities
+message ModelCapabilities {
+  bool supports_text = 1;
+  bool supports_images = 2;
+  bool supports_code = 3;
+  bool supports_tools = 4;
+  int32 max_context_length = 5;
+}
+
+// Tool execution details
+message ToolExecution {
+  string tool_name = 1;
+  string input = 2;
+  string output = 3;
+  bool success = 4;
+  string error_message = 5;
+  int64 execution_time_ms = 6;
+}
+
+// Token usage statistics
+message TokenUsage {
+  int32 input_tokens = 1;
+  int32 output_tokens = 2;
+  int32 total_tokens = 3;
+  double cost = 4;
+}
+
+// Response metadata
+message ResponseMetadata {
+  google.protobuf.Timestamp created_at = 1;
+  int64 processing_time_ms = 2;
+  string agent_version = 3;
+  repeated string reasoning_steps = 4;
+}
+
+// Conversation history request
+message GetConversationHistoryRequest {
+  string user_id = 1;
+  string conversation_id = 2;
+  int32 limit = 3;
+  string cursor = 4;
+}
+
+// Conversation history response
+message GetConversationHistoryResponse {
+  repeated Message messages = 1;
+  string next_cursor = 2;
+  bool has_more = 3;
+}
+
+// Message in history
+message Message {
+  string id = 1;
+  MessageRole role = 2;
+  string content = 3;
+  ModelInfo model_info = 4;
+  repeated ToolExecution tool_executions = 5;
+  TokenUsage token_usage = 6;
+  google.protobuf.Timestamp created_at = 7;
+
+  enum MessageRole {
+    USER = 0;
+    ASSISTANT = 1;
+    SYSTEM = 2;
+  }
+}
+
+service AgentService {
+  rpc ProcessMessage(ProcessMessageRequest) returns (ProcessMessageResponse);
+  rpc GetConversationHistory(GetConversationHistoryRequest) returns (GetConversationHistoryResponse);
+  rpc StreamMessage(ProcessMessageRequest) returns (stream MessageChunk);
+}
