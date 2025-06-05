@@ -1,5 +1,5 @@
 {
-  "name": "@crashteam/chainbrain-agent-proto",
+  "name": "@crashteamdev/chainbrain-agent-proto",
   "version": "0.0.1",
   "description": "Protobuf definitions for ChainBrain Agent Service",
   "main": "dist/index.js",
