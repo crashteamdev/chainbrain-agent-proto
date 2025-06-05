@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create generated directory
+        run: mkdir -p generated
+
       - name: Generate TypeScript from protobuf
         run: npm run generate
 

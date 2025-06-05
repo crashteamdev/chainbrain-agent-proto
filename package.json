@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*",
-    "proto/**/*.proto"
+    "src/main/proto/**/*.proto"
   ],
   "scripts": {
     "build": "npm run clean && npm run generate && npm run compile",
