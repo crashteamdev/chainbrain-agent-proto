@@ -64,6 +64,20 @@ message AgentOptions {
   int32 max_tokens = 5;
   bool enable_tools = 6;
   repeated string allowed_tools = 7;
+  repeated ModelAllowlist model_allowlist = 8;
+  CapabilitiesPolicy capabilities_policy = 9;
+}
+
+message ModelAllowlist {
+  string provider            = 1;   // "openai", "grok", "stability", …
+  repeated string model_names = 2;   // "gpt-4o", "claude-3-opus", …
+}
+
+message CapabilitiesPolicy {
+  bool allow_text      = 1; // Chat, summarization, ПХ и т.д.
+  bool allow_images    = 2; // DALL·E, Stable Diffusion…
+  bool allow_code      = 3; // Код-LLM, рефакторинг
+  bool allow_tool_use  = 4; // Вызов внешних инструментов
 }
 
 // Model information
