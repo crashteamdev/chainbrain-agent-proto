@@ -31,6 +31,7 @@ message MessageChunk {
   string content = 2;
   ModelInfo model_info = 3;
   ToolExecution tool_execution = 4;
+  TokenUsage token_usage = 5;
 
   enum ChunkType {
     TEXT = 0;
