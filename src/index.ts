@@ -19,6 +19,8 @@ export type {
   ResponseMetadata,
   GetConversationHistoryRequest,
   GetConversationHistoryResponse,
+  DeleteUserDataRequest,
+  DeleteUserDataResponse,
   Message,
   Message_MessageRole,
 } from '../generated/agent'; 
