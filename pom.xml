@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>chainbrain-agent-proto</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
 
     <properties>
         <grpc.version>1.56.1</grpc.version>

@@ -124,6 +124,22 @@ message ResponseMetadata {
   repeated string reasoning_steps = 4;
 }
 
+// Delete user data request
+message DeleteUserDataRequest {
+  string user_id = 1;
+}
+
+// Delete user data response
+message DeleteUserDataResponse {
+  bool success = 1;
+  string message = 2;
+  int32 messages_deleted = 3;
+  int32 conversations_deleted = 4;
+  int32 files_deleted = 5;
+  int32 vectors_deleted = 6;
+  int32 agent_executions_deleted = 7;
+}
+
 // Conversation history request
 message GetConversationHistoryRequest {
   string user_id = 1;
@@ -160,4 +176,5 @@ service AgentService {
   rpc ProcessMessage(ProcessMessageRequest) returns (ProcessMessageResponse);
   rpc GetConversationHistory(GetConversationHistoryRequest) returns (GetConversationHistoryResponse);
   rpc StreamMessage(ProcessMessageRequest) returns (stream MessageChunk);
+  rpc DeleteUserData(DeleteUserDataRequest) returns (DeleteUserDataResponse);
 }
